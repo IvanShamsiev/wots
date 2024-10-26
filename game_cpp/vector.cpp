@@ -26,6 +26,11 @@ Vector2 operator + ( Vector2 const &left, Vector2 const &right )
     return Vector2( left.x + right.x, left.y + right.y );
 }
 
+Vector2 operator - ( Vector2 const &left, Vector2 const &right )
+{
+    return Vector2( left.x - right.x, left.y - right.y );
+}
+
 
 Vector2 operator * ( float left, Vector2 const &right )
 {

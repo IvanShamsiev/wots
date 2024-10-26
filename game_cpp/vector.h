@@ -16,4 +16,5 @@ public:
 };
 
 Vector2 operator + ( Vector2 const &left, Vector2 const &right );
+Vector2 operator - ( Vector2 const &left, Vector2 const &right );
 Vector2 operator * ( float left, Vector2 const &right );

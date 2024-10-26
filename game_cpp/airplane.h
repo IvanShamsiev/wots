@@ -16,6 +16,7 @@ public:
         TURN_TO_TARGET,
         MOVE_TO_TARGET,
         TURN_AROUND_TARGET,
+        MOVE_TO_LANDING,
         LANDING
     };
     Airplane();
@@ -27,6 +28,8 @@ public:
     void schedule_position();
 
     void changeTarget(const Vector2& newTarget);
+    static float getTargetAngle(const Vector2& move_vector);
+    static void normalizeAngle(float& angle);
 
 private:
     scene::Mesh *mesh;
@@ -34,4 +37,5 @@ private:
     float angle;
 
     Vector2 target;
+    State state = TAKEOFF;
 };

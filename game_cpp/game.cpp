@@ -56,7 +56,7 @@ namespace game
 	}
 
 	void spawnNewAirplane() {
-		if (airplanes.size() >= params::aircraft::MAX_AIRPLANE_COUNT) return;
+		//if (airplanes.size() >= params::aircraft::MAX_AIRPLANE_COUNT) return;
 		auto airplane = std::make_shared<Airplane>();
 		airplane->init(ship, currentTarget);
 		airplanes.push_back(airplane);
@@ -68,11 +68,12 @@ namespace game
 		scene::screenToWorld( &worldPosition.x, &worldPosition.y );
 		ship.mouseClicked( worldPosition, isLeftButton );
 
-		if (isLeftButton)
+		if (isLeftButton) {
+			currentTarget = worldPosition;
 			for (auto airplane : airplanes) {
-				currentTarget = worldPosition;
 				airplane->changeTarget(currentTarget);
 			}
+		}
 		else
 			spawnNewAirplane();
 	}
