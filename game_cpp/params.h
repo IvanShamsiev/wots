@@ -20,5 +20,7 @@ namespace params
         constexpr float LINEAR_SPEED_MIN = LINEAR_SPEED_MAX / 5.0f;
 
         constexpr int MAX_AIRPLANE_COUNT = 5;
+        constexpr float MAX_AIRPLANE_FLY_TIME = 50.0f;
+        constexpr float AIRPLANE_REST_TIME = 1.0f;
     }
 }

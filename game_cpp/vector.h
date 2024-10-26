@@ -13,6 +13,11 @@ public:
     Vector2();
     Vector2( float vx, float vy );
     Vector2( Vector2 const &other );
+
+    static Vector2 getVector(float length, float angle);
+
+    float length() const;
+    float angle() const;
 };
 
 Vector2 operator + ( Vector2 const &left, Vector2 const &right );

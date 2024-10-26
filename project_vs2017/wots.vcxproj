@@ -36,6 +36,7 @@
     <ClInclude Include="..\game_cpp\params.h" />
     <ClInclude Include="..\game_cpp\scheduler.h" />
     <ClInclude Include="..\game_cpp\ship.h" />
+    <ClInclude Include="..\game_cpp\utils.h" />
     <ClInclude Include="..\game_cpp\vector.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
