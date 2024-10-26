@@ -24,6 +24,7 @@
     <ClCompile Include="..\game_cpp\airplane.cpp" />
     <ClCompile Include="..\game_cpp\game.cpp" />
     <ClCompile Include="..\game_cpp\main.cpp" />
+    <ClCompile Include="..\game_cpp\scheduler.cpp" />
     <ClCompile Include="..\game_cpp\ship.cpp" />
     <ClCompile Include="..\game_cpp\vector.cpp" />
   </ItemGroup>
@@ -33,6 +34,7 @@
     <ClInclude Include="..\framework\scene.hpp" />
     <ClInclude Include="..\game_cpp\airplane.h" />
     <ClInclude Include="..\game_cpp\params.h" />
+    <ClInclude Include="..\game_cpp\scheduler.h" />
     <ClInclude Include="..\game_cpp\ship.h" />
     <ClInclude Include="..\game_cpp\vector.h" />
   </ItemGroup>

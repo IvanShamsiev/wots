@@ -6,6 +6,7 @@
 
 #include "vector.h"
 #include "airplane.h"
+#include "scheduler.h"
 #include "ship.h"
 
 
@@ -17,6 +18,8 @@ namespace game
 {
 	Ship ship;
 	std::vector<std::shared_ptr<Airplane>> airplanes;
+
+	Vector2 currentTarget;
 
 	void init()
 	{
@@ -34,6 +37,7 @@ namespace game
 
 	void update( float dt )
 	{
+		Scheduler::getScheduler().update(dt);
 		ship.update( dt );
 		for (auto airplane : airplanes)
 			airplane->update(dt);
@@ -54,7 +58,7 @@ namespace game
 	void spawnNewAirplane() {
 		if (airplanes.size() >= params::aircraft::MAX_AIRPLANE_COUNT) return;
 		auto airplane = std::make_shared<Airplane>();
-		airplane->init(ship);
+		airplane->init(ship, currentTarget);
 		airplanes.push_back(airplane);
 	}
 
@@ -65,8 +69,10 @@ namespace game
 		ship.mouseClicked( worldPosition, isLeftButton );
 
 		if (isLeftButton)
-			for (auto airplane : airplanes)
-				airplane->changeTarget(worldPosition);
+			for (auto airplane : airplanes) {
+				currentTarget = worldPosition;
+				airplane->changeTarget(currentTarget);
+			}
 		else
 			spawnNewAirplane();
 	}

@@ -10,11 +10,21 @@
 
 class Airplane {
 public:
+
+    enum State {
+        TAKEOFF,
+        TURN_TO_TARGET,
+        MOVE_TO_TARGET,
+        TURN_AROUND_TARGET,
+        LANDING
+    };
     Airplane();
 
-    void init(const Ship& ship);
+    void init(const Ship& ship, const Vector2& initTarget);
     void deinit();
     void update(float dt);
+
+    void schedule_position();
 
     void changeTarget(const Vector2& newTarget);
 
