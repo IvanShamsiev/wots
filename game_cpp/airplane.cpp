@@ -17,8 +17,7 @@ static float _PI_2 = _PI / 2.0f;
 Airplane::Airplane() : target_params(), mesh(nullptr), angle(0.0f), current_speed(0.0f) {
 }
 
-void Airplane::init(const Vector2& initTarget)
-{
+void Airplane::init(const Vector2& initTarget) {
     assert( !mesh );
     mesh = scene::createAircraftMesh();
     position = Ship::getInstance()->getPosition();
@@ -36,15 +35,13 @@ void Airplane::init(const Vector2& initTarget)
 }
 
 
-void Airplane::deinit()
-{
+void Airplane::deinit() {
     scene::destroyMesh(mesh);
     mesh = nullptr;
     scheduler.unscheduleAllTasks();
 }
 
-void Airplane::update(float dt)
-{
+void Airplane::update(float dt) {
     scheduler.update(dt);
     
     float targetLinearSpeed = 0.0f;
@@ -62,7 +59,6 @@ void Airplane::update(float dt)
         
         if ((target_params.tangent - position).length() < 0.2f) {
             state = TURN_AROUND_TARGET;
-            update(dt);
             break;
         }
         targetLinearSpeed = LINEAR_SPEED_MAX;
@@ -76,7 +72,7 @@ void Airplane::update(float dt)
         updateTargetTangent();
         //angularSpeed = target_params.turnAngularSpeed;
         targetLinearSpeed = target_params.turnLinearSpeed;
-        angularSpeed = getAngularSpeed(target_params.tangent, 1.0f);
+        angularSpeed = getAngularSpeed(target_params.tangent, 2.5f);
 
         float distanceErr = target_params.turnRadius - (target_params.target - position).length();
         if (distanceErr > 0.0f) angularSpeed = 0.0f;
@@ -86,10 +82,8 @@ void Airplane::update(float dt)
     }
     case MOVE_TO_LANDING: {
         Vector2 moveVector = Ship::getInstance()->getPosition() - position;
-        float timeToSlowDown = (current_speed - LINEAR_SPEED_MIN)/LINEAR_ACCELERATION;
-        if (moveVector.length() < current_speed*(timeToSlowDown) - LINEAR_ACCELERATION * timeToSlowDown * timeToSlowDown) {
+        if (moveVector.length() < 2.0f) {
             state = LANDING;
-            update(dt);
             return;
         }
         
@@ -106,13 +100,15 @@ void Airplane::update(float dt)
             state = END;
             return;
         }
-        if (current_speed < LINEAR_SPEED_MIN && moveVector.length() > 0.3f) {
+        if (moveVector.length() > 2.0f) {
             state = MOVE_TO_LANDING;
-            update(dt);
             return;
         }
 
         targetLinearSpeed = LINEAR_SPEED_MIN / (moveVector.length() + 1.0f);
+        // ship can't swim away from airplane
+        if (targetLinearSpeed < params::ship::LINEAR_SPEED)
+            targetLinearSpeed = params::ship::LINEAR_SPEED + 0.2f;
         float target_angle = moveVector.angle();
         float turn_angle = normalizeTurnAngle(target_angle - angle);
         angularSpeed = turn_angle * ANGULAR_SPEED_MAX;
