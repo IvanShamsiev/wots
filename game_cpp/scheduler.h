@@ -4,20 +4,15 @@
 #include <chrono>
 #include <functional>
 
+// Simple implement of Task class
 struct Task {
-    const std::function<void()> function;
-    const uint64_t time_millis;
+    std::function<void()> function;
+    uint64_t time_millis;
+
+    bool operator<(const Task& other) const;
 };
 
-inline bool operator<(const Task& t1, const Task& t2) {
-    return t1.time_millis < t2.time_millis;
-}
-
-static uint64_t getCurrentTimeMillis() {
-    using namespace std::chrono;
-    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-}
-
+// Simple implement of Scheduler class
 class Scheduler {
 public:
     void scheduleTask(const std::function<void()>& function, float time);
@@ -25,5 +20,6 @@ public:
     void update(float dt);
 
 private:
+    // can have several tasks with same time_millis
     std::multiset<Task> tasks;
 };

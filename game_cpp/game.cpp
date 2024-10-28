@@ -10,6 +10,7 @@
 #include "airplane.h"
 #include "scheduler.h"
 #include "ship.h"
+#include "params.h"
 
 
 //-------------------------------------------------------
@@ -20,23 +21,24 @@ namespace game
 {
 	Scheduler scheduler;
 	
-	Ship ship;
+	std::shared_ptr<Ship> ship;
 	std::vector<std::shared_ptr<Airplane>> airplanes;
-	std::atomic<int> airplanes_count;
+	std::atomic<int> airplanes_count; // not important to make it atomic, game works in one thread
 
 	Vector2 currentTarget(0.0f, 0.0f);
 
 	void init()
 	{
-		ship.init();
-		Ship::setShip(ship);
+		ship = std::make_shared<Ship>();
+		ship->init();
+		Ship::setInstance(ship);
 		airplanes_count = 0;
 	}
 
 
 	void deinit()
 	{
-		ship.deinit();
+		if (ship) ship->deinit();
 		for (auto& airplane : airplanes)
 			airplane->deinit();
 		airplanes.clear();
@@ -55,7 +57,7 @@ namespace game
 		});
 		airplanes.erase(it, airplanes.end());
 		scheduler.update(dt);
-		ship.update( dt );
+		if (ship) ship->update( dt );
 		for (auto& airplane : airplanes)
 			airplane->update(dt);
 	}
@@ -63,19 +65,19 @@ namespace game
 
 	void keyPressed( int key )
 	{
-		ship.keyPressed( key );
+		if (ship) ship->keyPressed( key );
 	}
 
 
 	void keyReleased( int key )
 	{
-		ship.keyReleased( key );
+		if (ship) ship->keyReleased( key );
 	}
 
 	void spawnNewAirplane() {
 		if (airplanes_count >= params::aircraft::MAX_AIRPLANE_COUNT) return;
 		auto airplane = std::make_shared<Airplane>();
-		airplane->init(ship, currentTarget);
+		airplane->init(currentTarget);
 		airplanes.push_back(airplane);
 		++airplanes_count;
 	}
@@ -84,7 +86,7 @@ namespace game
 	{
 		Vector2 worldPosition( x, y );
 		scene::screenToWorld( &worldPosition.x, &worldPosition.y );
-		ship.mouseClicked( worldPosition, isLeftButton );
+		if (ship) ship->mouseClicked( worldPosition, isLeftButton );
 
 		if (isLeftButton) {
 			currentTarget = worldPosition;

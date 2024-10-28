@@ -1,7 +1,12 @@
 ﻿#include "scheduler.h"
+#include "utils.h"
+
+bool Task::operator<(const Task& other) const {
+    return time_millis < other.time_millis;
+}
 
 void Scheduler::scheduleTask(const std::function<void()>& function, float time) {
-    auto current_time = getCurrentTimeMillis();
+    auto current_time = utils::getCurrentTimeMillis();
     tasks.emplace(Task{ function, current_time + static_cast<int>(time * 1000.0f)});
 }
 
@@ -10,7 +15,7 @@ void Scheduler::unscheduleAllTasks() {
 }
 
 void Scheduler::update(float dt) {
-    auto current_time = getCurrentTimeMillis();
+    auto current_time = utils::getCurrentTimeMillis();
     for (auto& task : tasks) {
         if (task.time_millis <= current_time)
             task.function();

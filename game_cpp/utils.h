@@ -14,4 +14,9 @@ namespace utils
         float rand = getRandom();
         return min + rand * (max-min);
     }
+
+    static uint64_t getCurrentTimeMillis() {
+        using namespace std::chrono;
+        return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+    }
 }

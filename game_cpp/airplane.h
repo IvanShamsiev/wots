@@ -1,14 +1,9 @@
 ﻿#pragma once
 
-#include <cassert>
-#include <cmath>
-#include <functional>
-
 #include "scheduler.h"
 #include "../framework/scene.hpp"
 
 #include "vector.h"
-#include "ship.h"
 
 class Airplane {
 public:
@@ -33,29 +28,25 @@ public:
     
     Airplane();
 
-    void init(const Ship& ship, const Vector2& initTarget);
+    void init(const Vector2& initTarget);
     void deinit();
-    void setOnLandingCallback(const std::function<void(const Airplane* airpln)>& callback);
     void update(float dt);
 
-    void schedule_position();
+    static float normalizeAngle(float angle);
+    static float normalizeTurnAngle(float turn_angle);
 
+    // CORRECT_ERR higher -> less turn-around error but less rotation smoothless
+    float getAngularSpeed(const Vector2& target, float CORRECT_ERR) const;
+    
     void changeTarget(const Vector2& newTarget);
-    static float getTargetAngle(const Vector2& move_vector);
-    static void normalizeAngle(float& angle);
-
     void computeTargetTangentParams();
     void updateTargetTangent();
 
 private:
     Scheduler scheduler;
-    
     scene::Mesh *mesh;
+    
     Vector2 position;
     float angle;
     float current_speed;
-
-    Vector2 prevMoveVector;
-
-    Vector2 target;
 };

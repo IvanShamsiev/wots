@@ -1,13 +1,11 @@
 ﻿#pragma once
 
-#include <cassert>
-#include <cmath>
+#include <memory>
 
-#include "../framework/scene.hpp"
 #include "../framework/game.hpp"
+#include "../framework/scene.hpp"
 
 #include "vector.h"
-#include "params.h"
 
 //-------------------------------------------------------
 //	Simple ship logic
@@ -28,12 +26,14 @@ public:
     Vector2 getPosition() const { return position; }
     float getAngle() const { return angle; }
 
-    static void setShip(Ship& ship) { _ship = &ship; }
-    static const Ship* getShip() { return _ship; }
+    static void setInstance(const std::shared_ptr<Ship>& ship) {
+        _ship = ship;
+    }
+    static std::shared_ptr<Ship> getInstance() { return _ship; }
 
 private:
     
-    static Ship* _ship;
+    static std::shared_ptr<Ship> _ship;
     scene::Mesh *mesh;
     Vector2 position;
     float angle;
