@@ -53,6 +53,9 @@ private:
     scene::Mesh *mesh;
     Vector2 position;
     float angle;
+    float current_speed;
+
+    Vector2 prevMoveVector;
 
     Vector2 target;
 };
